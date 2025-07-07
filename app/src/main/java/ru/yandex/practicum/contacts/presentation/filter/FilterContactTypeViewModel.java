@@ -1,5 +1,8 @@
 package ru.yandex.practicum.contacts.presentation.filter;
 
+import static ru.yandex.practicum.contacts.model.ContactType.getContactTypes;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -60,14 +63,26 @@ public class FilterContactTypeViewModel extends BaseBottomSheetViewModel {
     }
 
     private void updateFilterContactTypes() {
-        // создайте массив строк. Для инициализации используйте метод ContactType.getContactTypes(),
+        String[] contactTypes = ContactType.getContactTypes();
+        ArrayList<FilterContactTypeUi> filterContactTypeUiList = new ArrayList<>();
+
+        filterContactTypeUiList.add(createAllSelectedItem(contactTypes));
+
+        for (String type : contactTypes) {
+            filterContactTypeUiList.add(createFilterContactType(type));
+        }
+
+        filterContactTypesLiveDate.setValue(filterContactTypeUiList);
+    }
+
+    // создайте массив строк. Для инициализации используйте метод ContactType.getContactTypes(),
         // который должен возвращать список всех доступных источников контактов
 
         // создайте список типа FilterContactTypeUi и заполните его с помощью цикла forEach
         // forEach должен бежать по строковому массиву, который вы создали ранее
 
         // вызовите меотод setValue() у переменной filterContactTypesLiveDate и передайте в качестве аргументы ваш список типа FilterContactTypeUi
-    }
+
 
     @NonNull
     private FilterContactTypeUi createAllSelectedItem(final String[] types) {
@@ -91,10 +106,10 @@ public class FilterContactTypeViewModel extends BaseBottomSheetViewModel {
 
     private void updateSelectedContactTypes(FilterContactType type) {
         if (type == FilterContactType.ALL) {
-            if (selectedFilterContactTypes.size() == ContactType.getContactTypes().length) {
+            if (selectedFilterContactTypes.size() == getContactTypes().length) {
                 selectedFilterContactTypes.clear();
             } else {
-                selectedFilterContactTypes.addAll(Arrays.asList(ContactType.getContactTypes()));
+                selectedFilterContactTypes.addAll(Arrays.asList(getContactTypes()));
             }
             return;
         }
